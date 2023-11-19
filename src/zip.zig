@@ -41,6 +41,15 @@ pub fn create(zipname: [:0]const u8, filenames: []const [*:0]const u8) ZipError!
     return getError(c.zip_create(zipname, @ptrCast(@constCast(filenames.ptr)), filenames.len)) orelse {};
 }
 
+pub fn extract(
+    zipname: [:0]const u8,
+    dir: [:0]const u8,
+    on_extract_entry: ?*const fn ([*c]const u8, ?*anyopaque) callconv(.C) c_int,
+    arg: ?*anyopaque,
+) ZipError!void {
+    return getError(c.zip_extract(zipname, dir, on_extract_entry, arg)) orelse {};
+}
+
 fn getError(code: c_int) ?ZipError {
     return switch (code) {
         -1 => error.ENOINIT,
