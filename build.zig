@@ -21,9 +21,10 @@ pub fn build(b: *std.Build) void {
         // complicated build scripts, this could be a generated file.
         .root_source_file = .{ .path = "src/main.zig" },
         .target = target,
-        .optimize = optimize,
+        .optimize = .ReleaseFast,
     });
 
+    exe.addIncludePath(.{ .path = "lib" });
     exe.addCSourceFile(.{ .file = .{ .path = "lib/zip.c" }, .flags = &.{} });
     exe.linkLibC();
 
